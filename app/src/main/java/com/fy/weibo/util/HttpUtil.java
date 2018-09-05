@@ -84,6 +84,8 @@ public  class HttpUtil {
 
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         for (Entry<String, String> entry : params.entrySet()) {
+            Log.e("key",entry.getKey());
+            Log.e("Value",entry.getValue());
             formBodyBuilder.add(entry.getKey(), entry.getValue());
         }
         FormBody formBody = formBodyBuilder.build();

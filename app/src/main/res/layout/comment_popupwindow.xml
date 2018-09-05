@@ -4,10 +4,6 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"/>
 
     <TextView
         android:id="@+id/title"
@@ -23,6 +19,7 @@
         android:id="@+id/dialog_edit"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:gravity="top"
         android:background="@android:color/white"
         android:hint="请输入评论（不超过140字）" />
 <View
