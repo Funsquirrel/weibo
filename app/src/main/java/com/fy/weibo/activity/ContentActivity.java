@@ -1,14 +1,25 @@
 package com.fy.weibo.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -18,11 +29,14 @@ import com.fy.weibo.adapter.CommentsAdapter;
 import com.fy.weibo.adapter.WeiBoImgAdapter;
 import com.fy.weibo.bean.Comments;
 import com.fy.weibo.bean.PicUrlsBean;
+import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.contract.CommentContract;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
+import com.fy.weibo.util.HttpUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +44,13 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
-public final class ContentActivity extends BaseMVPActivity<CommentContract.CommentContractPresenter> implements CommentContract.CommentView {
+public final class ContentActivity extends BaseMVPActivity<CommentContract.CommentContractPresenter> implements CommentContract.CommentView, View.OnClickListener {
 
-
+    public static final String POST_WEIBO_COMMENT="https://api.weibo.com/2/comments/create.json";
     private RecyclerView recyclerView;
     private CommentsAdapter commentsAdapter;
     private List<Comments> commentsList;
@@ -77,6 +94,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
         TextView commentCounts = findViewById(R.id.comment_counts);
         TextView shareCounts = findViewById(R.id.share_counts);
         TextView thumbUpCounts = findViewById(R.id.thumb_up_counts);
+        ImageView commentImage=findViewById(R.id.comment);//评论点击处，
         weiBoText.setMaxLines(100);
         weiBoText.setText(weiBo.getText());
         RequestOptions options = new RequestOptions().placeholder(new ColorDrawable(Color.WHITE));
@@ -104,6 +122,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
             imgRecyclerView.setAdapter(adapter);
         }
 
+        commentImage.setOnClickListener(this);//评论点击事件
     }
 
 
@@ -140,6 +159,79 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
             recyclerView.setAdapter(commentsAdapter);
         });
     }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.comment:
+                WeiBo userInfo = (WeiBo) getIntent().getSerializableExtra("weibo");
+                String id=userInfo.getIdstr();
+                showPopupWindow(ContentActivity.this,R.layout.comment_popupwindow, Constants.ACCESS_TOKEN,id);
+        }
+    }
+
+
+//评论窗口部分 以详细界面的comment图标进行点击评论
+    private void showPopupWindow(Context context,int resource,String access_token,String id){
+        View view = View.inflate(context, resource, null);
+        final PopupWindow popupWindow = new PopupWindow(view);
+        popupWindow.setWidth(WindowManager.LayoutParams.FILL_PARENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        Button cancel=(Button)view.findViewById(R.id.btn_cancel);
+        Button ok=(Button)view.findViewById(R.id.btn_comfirm);
+        final EditText editText=(EditText)view.findViewById(R.id.dialog_edit) ;
+        View.OnClickListener listener = new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                switch(view.getId()){
+                    case R.id.btn_cancel:
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.btn_comfirm:
+                        String CcommentText= String.valueOf(editText.getText());
+                        Map<String,String> info=new HashMap<>() ;
+                        info.put("token",access_token);
+                        info.put("id",id);
+                        info.put("commentInfo",CcommentText);
+                        HttpUtil.getHttpUtil().post(POST_WEIBO_COMMENT,info,new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ContentActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ContentActivity.this, "success", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                        } );
+                        popupWindow.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }};
+        cancel.setOnClickListener(listener);
+        ok.setOnClickListener(listener);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+    }
+
+
 }
 
 /*

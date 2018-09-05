@@ -15,7 +15,7 @@ public final class Constants {
     public static String USER_PASSWORD = "";
     public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
     public static Oauth2AccessToken accessToken = null;
-    public static  String ACCESS_TOKEN = "";
+    public static  String ACCESS_TOKEN = "2.00eOAmNH0jiGIi86a5f58617934RkD";//token改动 ybc
     public static final String SCOPE = null;
     public static final String App_SECRET = "c624038a6b168c44d8fea099c11199e0";
     public static final String KEY_SHARE_TYPE = "key_share_type";
@@ -36,7 +36,6 @@ public final class Constants {
     public static final String GET_TO_ME_COMMENTS = "https://api.weibo.com/2/comments/to_me.json";
     public static final String GET_COMMENT_MENTION = "https://api.weibo.com/2/comments/mentions.json";
     public static final String GET_WEIBO_MENTION = "https://api.weibo.com/2/statuses/mentions.json";
-
 }
 
 /*
