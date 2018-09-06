@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +15,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,12 +31,16 @@ import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.contract.UserInfoContract;
 
 import com.fy.weibo.fragment.MentionViewPagerFragment;
-import com.fy.weibo.fragment.ShareWeiBoFragment;
 import com.fy.weibo.fragment.CommentViewPagerFragment;
 import com.fy.weibo.fragment.WeiBoViewPagerFragment;
 import com.fy.weibo.presenter.UserInfoPresenter;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.NetStateUtil;
+import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.share.WbShareCallback;
+import com.sina.weibo.sdk.share.WbShareHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +49,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public final class MainActivity extends BaseMVPActivity<UserInfoContract.UserInfoContractPresenter> implements UserInfoContract.UserInfoView {
+public final class MainActivity extends BaseMVPActivity<UserInfoContract.
+        UserInfoContractPresenter> implements UserInfoContract.UserInfoView,WbShareCallback {
 
     private DrawerLayout drawerLayout;
     private CircleImageView userImg;
@@ -56,6 +59,7 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.UserInf
     private FragmentTransaction transaction;
     public FloatingActionButton floatButton;
     public Toolbar toolbar;
+    private WbShareHandler shareHandler;
 
 
     @Override
@@ -100,12 +104,6 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.UserInf
                     transaction.commit();
                     drawerLayout.closeDrawers();
                     break;
-                case R.id.sendWeiBo:
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.main_frame, new ShareWeiBoFragment());
-                    transaction.commit();
-                    drawerLayout.closeDrawers();
-                    break;
                 case R.id.message:
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.main_frame, new MentionViewPagerFragment());
@@ -118,6 +116,12 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.UserInf
         });
 
         floatButton.setOnClickListener(view -> {
+            if (new NetStateUtil().checkNet(this)){
+                initWeibo();
+                sendMultiMessage();
+            } else {
+                Toast.makeText(this,"请检查网络状态",Toast.LENGTH_SHORT).show();
+            }
 
         });
 
@@ -209,6 +213,49 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.UserInf
             });
         });
 
+    }
+
+    /**
+     * 微博分享
+     *
+     *
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        shareHandler.doResultIntent(intent,this);
+    }
+
+
+    private void initWeibo() {
+        shareHandler = new WbShareHandler(this);
+        shareHandler.registerApp();
+        shareHandler.setProgressColor(0xff33b5e5);
+    }
+    /**
+     * 第三方应用发送请求消息到微博，唤起微博分享界面。
+     */
+    private void sendMultiMessage() {
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+        weiboMessage.imageObject = new ImageObject();
+        weiboMessage.textObject = new TextObject();
+
+        shareHandler.shareMessage(weiboMessage, false);
+    }
+
+    @Override
+    public void onWbShareSuccess() {
+        Toast.makeText(this,"分享成功", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onWbShareFail() {
+        Toast.makeText(this,"分享失败", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onWbShareCancel() {
+        Toast.makeText(this,"分享取消", Toast.LENGTH_LONG).show();
     }
 
 }
