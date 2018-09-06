@@ -10,11 +10,6 @@
             android:icon="@drawable/article_black1"
             android:id="@+id/first_page"
             android:title="@string/first_page"/>
-
-        <item
-            android:id="@+id/sendWeiBo"
-            android:icon="@drawable/ic_create"
-            android:title="@string/send_weibo"/>
         <item
             android:id="@+id/my_comment"
             android:title="@string/my_comments"
