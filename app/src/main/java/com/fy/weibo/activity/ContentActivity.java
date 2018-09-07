@@ -94,7 +94,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
         TextView commentCounts = findViewById(R.id.comment_counts);
         TextView shareCounts = findViewById(R.id.share_counts);
         TextView thumbUpCounts = findViewById(R.id.thumb_up_counts);
-        ImageView commentImage=findViewById(R.id.comment);//评论点击处，
+        Button commentBtn=findViewById(R.id.comment_btn);//评论点击处，
         weiBoText.setMaxLines(100);
         weiBoText.setText(weiBo.getText());
         RequestOptions options = new RequestOptions().placeholder(new ColorDrawable(Color.WHITE));
@@ -122,7 +122,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
             imgRecyclerView.setAdapter(adapter);
         }
 
-        commentImage.setOnClickListener(this);//评论点击事件
+        commentBtn.setOnClickListener(this);//评论点击事件
     }
 
 
@@ -163,7 +163,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.comment:
+            case R.id.comment_btn:
                 WeiBo userInfo = (WeiBo) getIntent().getSerializableExtra("weibo");
                 String id=userInfo.getIdstr();
                 showPopupWindow(ContentActivity.this,R.layout.comment_popupwindow, Constants.ACCESS_TOKEN,id);
@@ -192,18 +192,19 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
                         popupWindow.dismiss();
                         break;
                     case R.id.btn_comfirm:
-                        String CcommentText= String.valueOf(editText.getText());
+                        String CommentText= String.valueOf(editText.getText());
+                        if(CommentText.length()<140){
                         Map<String,String> info=new HashMap<>() ;
-                        info.put("token",access_token);
+                        info.put("access_token",access_token);
                         info.put("id",id);
-                        info.put("commentInfo",CcommentText);
+                        info.put("comment",CommentText);
                         HttpUtil.getHttpUtil().post(POST_WEIBO_COMMENT,info,new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(ContentActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ContentActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 });
@@ -214,12 +215,14 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(ContentActivity.this, "success", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ContentActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
                             }
-                        } );
+                        } );}else {
+                            Toast.makeText(ContentActivity.this,"字数超限",Toast.LENGTH_SHORT).show();
+                        }
                         popupWindow.dismiss();
                         break;
                     default:

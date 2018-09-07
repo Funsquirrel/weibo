@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
     xmlns:tools="http://schemas.android.com/tools">
-
+<android.support.v4.widget.NestedScrollView
+    android:layout_height="match_parent"
+    android:layout_above="@id/comment_btn"
+    android:layout_width="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -72,5 +75,13 @@
 
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/comment_btn"
+        android:text="发送评论"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_orange_light"/>
+</RelativeLayout>
 
 <!-- 微博正文 -->
