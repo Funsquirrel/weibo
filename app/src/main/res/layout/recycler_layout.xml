@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
@@ -16,10 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarThumbVertical="@drawable/scroll_bar"
+
             android:scrollbars="vertical">
 
         </android.support.v7.widget.RecyclerView>
-
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

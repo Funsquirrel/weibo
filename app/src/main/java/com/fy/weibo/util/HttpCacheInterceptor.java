@@ -24,7 +24,6 @@ public class HttpCacheInterceptor implements Interceptor {
         if (NetStateUtil.checkNet(App.getAppInstance().getApplicationContext())) {
             // 有网络时缓存一小时
             int maxAge = 60 * 60;
-
             request = request
                     .newBuilder()
                     .cacheControl(CacheControl.FORCE_NETWORK)

@@ -4,8 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,30 +14,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.fy.weibo.base.BaseMVPActivity;
 import com.fy.weibo.R;
 import com.fy.weibo.adapter.CommentsAdapter;
 import com.fy.weibo.adapter.WeiBoImgAdapter;
+import com.fy.weibo.base.BaseMVPActivity;
 import com.fy.weibo.bean.Comments;
 import com.fy.weibo.bean.PicUrlsBean;
-import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.contract.CommentContract;
+import com.fy.weibo.listener.HideListener;
+import com.fy.weibo.listener.ScrollViewListener;
+import com.fy.weibo.model.SendCommentModel;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
-import com.fy.weibo.util.HttpUtil;
+import com.fy.weibo.util.NetStateUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,16 +47,15 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public final class ContentActivity extends BaseMVPActivity<CommentContract.CommentContractPresenter> implements CommentContract.CommentView, View.OnClickListener {
 
-    public static final String POST_WEIBO_COMMENT="https://api.weibo.com/2/comments/create.json";
     private RecyclerView recyclerView;
     private CommentsAdapter commentsAdapter;
     private List<Comments> commentsList;
+    private SwipeRefreshLayout refreshLayout;
+    private Button commentBtn;
+    private NestedScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +70,23 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
 
     @Override
     public void initView() {
+        ImageView backImage = findViewById(R.id.back_image);
+        backImage.setOnClickListener(this);
+        refreshLayout = findViewById(R.id.content_refresh);
+        refreshLayout.setColorSchemeResources(R.color.orange, R.color.orangered);
+        refreshLayout.setOnRefreshListener(() -> {
+            loadComments();
+            if (!NetStateUtil.checkNet(this))
+                refreshLayout.setRefreshing(false);
+        });
         recyclerView = findViewById(R.id.comment_content_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         DividerItemDecoration decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         decoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.comment_decoration)));
         recyclerView.addItemDecoration(decoration);
         recyclerView.setNestedScrollingEnabled(false);
+        scrollView = findViewById(R.id.content_scroll_view);
+        setScrollListener();
     }
 
 
@@ -94,7 +107,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
         TextView commentCounts = findViewById(R.id.comment_counts);
         TextView shareCounts = findViewById(R.id.share_counts);
         TextView thumbUpCounts = findViewById(R.id.thumb_up_counts);
-        Button commentBtn=findViewById(R.id.comment_btn);//评论点击处，
+        commentBtn = findViewById(R.id.comment_btn);//评论点击处，
         weiBoText.setMaxLines(100);
         weiBoText.setText(weiBo.getText());
         RequestOptions options = new RequestOptions().placeholder(new ColorDrawable(Color.WHITE));
@@ -111,7 +124,7 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
         List<PicUrlsBean> imgUrls = weiBo.getPic_urls();
         if (imgUrls != null) {
             List<String> urls = new ArrayList<>();
-            for (PicUrlsBean url: imgUrls) {
+            for (PicUrlsBean url : imgUrls) {
                 urls.add(url.getThumbnail_pic().replaceFirst("thumbnail", "bmiddle"));
             }
             RecyclerView imgRecyclerView = findViewById(R.id.wei_bo_img_recycler);
@@ -121,7 +134,6 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
             WeiBoImgAdapter adapter = new WeiBoImgAdapter(this, urls);
             imgRecyclerView.setAdapter(adapter);
         }
-
         commentBtn.setOnClickListener(this);//评论点击事件
     }
 
@@ -132,7 +144,10 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
 
     @Override
     public void showError(String e) {
-        super.showError(e);
+        this.runOnUiThread(() -> {
+            Toast.makeText(this, e, Toast.LENGTH_SHORT).show();
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     @Override
@@ -140,8 +155,12 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
         return new CommentsPresenter();
     }
 
+
     @Override
     public void loadComments() {
+        refreshLayout.setRefreshing(true);
+        if (!NetStateUtil.checkNet(this))
+            refreshLayout.setRefreshing(false);
         WeiBo weiBo = (WeiBo) getIntent().getSerializableExtra("weibo");
         String strId = weiBo.getIdstr();
         Map<String, String> params = new HashMap<>();
@@ -157,83 +176,81 @@ public final class ContentActivity extends BaseMVPActivity<CommentContract.Comme
             this.commentsList = comments;
             commentsAdapter = new CommentsAdapter(ContentActivity.this, commentsList);
             recyclerView.setAdapter(commentsAdapter);
+            refreshLayout.setRefreshing(false);
         });
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.comment_btn:
                 WeiBo userInfo = (WeiBo) getIntent().getSerializableExtra("weibo");
-                String id=userInfo.getIdstr();
-                showPopupWindow(ContentActivity.this,R.layout.comment_popupwindow, Constants.ACCESS_TOKEN,id);
+                String id = userInfo.getIdstr();
+                showPopupWindow(ContentActivity.this, R.layout.comment_popupwindow, Constants.ACCESS_TOKEN, id);
+                break;
+            case R.id.back_image:
+                this.finish();
+                break;
+            default:
+                break;
         }
     }
 
 
-//评论窗口部分 以详细界面的comment图标进行点击评论
-    private void showPopupWindow(Context context,int resource,String access_token,String id){
+    //评论窗口部分 以详细界面的comment图标进行点击评论
+    private void showPopupWindow(Context context, int resource, String access_token, String id) {
         View view = View.inflate(context, resource, null);
         final PopupWindow popupWindow = new PopupWindow(view);
-        popupWindow.setWidth(WindowManager.LayoutParams.FILL_PARENT);
+        popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        Button cancel=(Button)view.findViewById(R.id.btn_cancel);
-        Button ok=(Button)view.findViewById(R.id.btn_comfirm);
-        final EditText editText=(EditText)view.findViewById(R.id.dialog_edit) ;
-        View.OnClickListener listener = new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                switch(view.getId()){
-                    case R.id.btn_cancel:
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.btn_comfirm:
-                        String CommentText= String.valueOf(editText.getText());
-                        if(CommentText.length()<140){
-                        Map<String,String> info=new HashMap<>() ;
-                        info.put("access_token",access_token);
-                        info.put("id",id);
-                        info.put("comment",CommentText);
-                        HttpUtil.getHttpUtil().post(POST_WEIBO_COMMENT,info,new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(ContentActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(ContentActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                            }
-                        } );}else {
-                            Toast.makeText(ContentActivity.this,"字数超限",Toast.LENGTH_SHORT).show();
-                        }
-                        popupWindow.dismiss();
-                        break;
-                    default:
-                        break;
-                }
-            }};
+        Button cancel = view.findViewById(R.id.btn_cancel);
+        Button ok = view.findViewById(R.id.btn_confirm);
+        final EditText editText = view.findViewById(R.id.dialog_edit);
+        View.OnClickListener listener = view1 -> {
+            switch (view1.getId()) {
+                case R.id.btn_cancel:
+                    popupWindow.dismiss();
+                    break;
+                case R.id.btn_confirm:
+                    String CommentText = String.valueOf(editText.getText());
+                    if (CommentText.length() < 140) {
+                        Map<String, String> info = new HashMap<>();
+                        info.put("access_token", access_token);
+                        info.put("id", id);
+                        info.put("comment", CommentText);
+                        SendCommentModel.sendComment(this, Constants.POST_WEIBO_COMMENT, info);
+                    } else {
+                        Toast.makeText(ContentActivity.this, "字数超限", Toast.LENGTH_SHORT).show();
+                    }
+                    popupWindow.dismiss();
+                    break;
+                default:
+                    break;
+            }
+        };
         cancel.setOnClickListener(listener);
         ok.setOnClickListener(listener);
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
 
+
+    private void setScrollListener() {
+
+        scrollView.setOnScrollChangeListener(new ScrollViewListener(new HideListener() {
+            @Override
+            public void hide() {
+                commentBtn.animate().translationY(commentBtn.getHeight()).setInterpolator(new AccelerateDecelerateInterpolator());
+            }
+
+            @Override
+            public void show() {
+                commentBtn.animate().translationY(0).setInterpolator(new DecelerateInterpolator());
+            }
+        }));
+    }
 
 }
 

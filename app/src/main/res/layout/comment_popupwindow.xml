@@ -13,7 +13,7 @@
         android:background="@android:color/holo_orange_light"
         android:gravity="center"
         android:padding="10dp"
-        android:text="评论"
+        android:text="@string/comment"
         android:textSize="18sp" />
     <View
         android:layout_width="match_parent"
@@ -25,7 +25,8 @@
         android:layout_height="200dp"
         android:gravity="top"
         android:background="@android:color/white"
-        android:hint="请输入评论（不超过140字）" />
+        android:hint="@string/comment_hint"
+        android:inputType="text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,19 +39,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="取消" />
+            android:text="@string/cancel" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="40dp"
-            android:background="#D1D1D1"></View>
+            android:background="#D1D1D1"/>
 
         <Button
-            android:id="@+id/btn_comfirm"
+            android:id="@+id/btn_confirm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="确定" />
+            android:text="@string/sure" />
     </LinearLayout>
 
 </LinearLayout>

@@ -18,7 +18,8 @@ import com.fy.weibo.adapter.WeiBoAdapter;
 import com.fy.weibo.base.BaseMVPFragment;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.contract.WeiBoContract;
-import com.fy.weibo.listener.MyScrollListener;
+import com.fy.weibo.listener.HideListener;
+import com.fy.weibo.listener.RecyclerViewScrollListener;
 import com.fy.weibo.presenter.WeiBoPresenter;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.NetStateUtil;
@@ -133,10 +134,12 @@ public final class WeiBoFragment extends BaseMVPFragment<WeiBoContract.WeiBoCont
         loadWeiBo();
     }
 
+
+
     private void setScrollListener() {
 
         FloatingActionButton floatingActionButton = ((MainActivity) mActivity).floatButton;
-        itemRecyclerView.addOnScrollListener(new MyScrollListener(new MyScrollListener.HideListener() {
+        itemRecyclerView.addOnScrollListener(new RecyclerViewScrollListener(new HideListener() {
             @Override
             public void hide() {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) floatingActionButton.getLayoutParams();

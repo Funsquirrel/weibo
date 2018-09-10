@@ -1,11 +1,15 @@
 package com.fy.weibo.util;
 
 import android.util.Log;
+
 import com.fy.weibo.App;
+
 import java.io.File;
 import java.util.Map;
-import java.util.Map.*;
+import java.util.Map.Entry;
+
 import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -18,16 +22,18 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by Fan on 2018/7/24.
  * Fighting!!!
  */
-public  class HttpUtil {
+public class HttpUtil {
 
     private HttpCacheInterceptor cacheInterceptor = new HttpCacheInterceptor();
-    private  int CACHE_SIZE = 10 * 1024 * 1024;
+    private int CACHE_SIZE = 10 * 1024 * 1024;
     private String CACHE_PATH = App.getAppInstance().getApplicationContext().getCacheDir() + "/okCache";
+
+
     public static HttpUtil getHttpUtil() {
         return HttpUtilHolder.httpUtil;
     }
 
-    private static class HttpUtilHolder{
+    private static class HttpUtilHolder {
         private static HttpUtil httpUtil = new HttpUtil();
     }
 
@@ -51,7 +57,7 @@ public  class HttpUtil {
     }
 
 
-    public  void getData(String address, Map<String, String> params, Callback callback) {
+    public void getData(String address, Map<String, String> params, Callback callback) {
 
         HttpUrl httpUrl = HttpUrl.parse(address);
         if (httpUrl != null) {
@@ -61,15 +67,30 @@ public  class HttpUtil {
             }
             httpUrl = urlBuilder.build();
 
-             Request.Builder requestBuilder = new Request
-                    .Builder()
-                     .url(httpUrl.toString());
-            Call call = new OkHttpClient.Builder()
+//            Call call = new OkHttpClient.Builder()
+//                    .cache(getCache(CACHE_PATH, CACHE_SIZE))
+//                    .addInterceptor(getLoggerInterceptor())
+//                    .addNetworkInterceptor(cacheInterceptor)
+//                    .build()
+//                    .newCall(requestBuilder.build());
+
+            Request.Builder requestBuilder = null;
+            if (NetStateUtil.checkNet(App.getAppInstance().getApplicationContext())) {
+                requestBuilder = new Request
+                        .Builder()
+                        .cacheControl(CacheControl.FORCE_NETWORK)
+                        .url(httpUrl.toString());
+            } else {
+                requestBuilder = new Request
+                        .Builder()
+                        .url(httpUrl.toString());
+            }
+            Call call = okHttpBuilder
                     .cache(getCache(CACHE_PATH, CACHE_SIZE))
-                    .addInterceptor(getLoggerInterceptor())
                     .addNetworkInterceptor(cacheInterceptor)
                     .build()
                     .newCall(requestBuilder.build());
+
             if (call != null) {
                 call.enqueue(callback);
             }
@@ -80,7 +101,7 @@ public  class HttpUtil {
 
     //  post 请求
 
-    public  void post(String baseUrl, Map<String, String> params, Callback callback) {
+    public void post(String baseUrl, Map<String, String> params, Callback callback) {
 
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         for (Entry<String, String> entry : params.entrySet()) {
@@ -88,12 +109,13 @@ public  class HttpUtil {
         }
         FormBody formBody = formBodyBuilder.build();
 
-         Request.Builder requestBuilder = new Request
+        Request.Builder requestBuilder = new Request
                 .Builder()
-                 .url(baseUrl)
-                 .post(formBody);
+                .url(baseUrl)
+                .post(formBody);
 
-        Call call = okHttpBuilder
+        Call call = new OkHttpClient
+                .Builder()
                 .build()
                 .newCall(requestBuilder.build());
         if (call != null) {

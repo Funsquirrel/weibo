@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
  * Created by Fan on 2018/8/31.
  * Fighting!!!
  */
-public  class MyScrollListener extends RecyclerView.OnScrollListener {
+public  class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
 
     private HideListener hideListener;
@@ -14,7 +14,7 @@ public  class MyScrollListener extends RecyclerView.OnScrollListener {
     private boolean visible = true;
     private int distance = 0;
 
-    public MyScrollListener(HideListener hideListener) {
+    public RecyclerViewScrollListener(HideListener hideListener) {
         super();
         this.hideListener = hideListener;
 
@@ -47,10 +47,4 @@ public  class MyScrollListener extends RecyclerView.OnScrollListener {
         }
 
     }
-    public interface HideListener {
-
-        void hide();
-        void show();
-    }
-
 }

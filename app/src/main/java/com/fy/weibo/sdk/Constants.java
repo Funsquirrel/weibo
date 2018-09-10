@@ -15,12 +15,10 @@ public final class Constants {
     public static String USER_PASSWORD = "";
     public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
     public static Oauth2AccessToken accessToken = null;
-    public static  String ACCESS_TOKEN = "2.00eOAmNH0jiGIi86a5f58617934RkD";//token改动 ybc
+    public static  String ACCESS_TOKEN = "";//token改动 ybc
     public static final String SCOPE = null;
     public static final String App_SECRET = "c624038a6b168c44d8fea099c11199e0";
     public static final String KEY_SHARE_TYPE = "key_share_type";
-    public static final int SHARE_CLIENT = 1;
-    public static final int SHARE_ALL_IN_ONE = 2;
     public static final String TAG = "TAG";
     // post 请求
 //    public static final String ACCESS_TOKEN = "https://api.weibo.com/oauth2/access_token";
@@ -36,6 +34,7 @@ public final class Constants {
     public static final String GET_TO_ME_COMMENTS = "https://api.weibo.com/2/comments/to_me.json";
     public static final String GET_COMMENT_MENTION = "https://api.weibo.com/2/comments/mentions.json";
     public static final String GET_WEIBO_MENTION = "https://api.weibo.com/2/statuses/mentions.json";
+    public static final String POST_WEIBO_COMMENT = "https://api.weibo.com/2/comments/create.json";
 }
 
 /*

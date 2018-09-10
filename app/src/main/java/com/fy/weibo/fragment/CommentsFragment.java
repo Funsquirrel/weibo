@@ -19,9 +19,8 @@ import com.fy.weibo.R;
 import com.fy.weibo.adapter.CommentsAdapter;
 import com.fy.weibo.bean.Comments;
 import com.fy.weibo.contract.CommentContract;
-import com.fy.weibo.contract.WeiBoContract;
-import com.fy.weibo.interfaces.IBaseView;
-import com.fy.weibo.listener.MyScrollListener;
+import com.fy.weibo.listener.HideListener;
+import com.fy.weibo.listener.RecyclerViewScrollListener;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.NetStateUtil;
@@ -81,6 +80,7 @@ public final class CommentsFragment extends BaseMVPFragment<CommentContract.Comm
         DividerItemDecoration decoration = new DividerItemDecoration(getAttachActivity(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getAttachActivity(), R.drawable.item_decoration)));
         recyclerView.addItemDecoration(decoration);
+        recyclerView.setNestedScrollingEnabled(true);
         setScrollListener();
         refreshLayout.setColorSchemeResources(R.color.orange, R.color.orangered);
         refreshLayout.setOnRefreshListener(() -> {
@@ -141,7 +141,7 @@ public final class CommentsFragment extends BaseMVPFragment<CommentContract.Comm
     private void setScrollListener() {
 
         FloatingActionButton floatingActionButton =  ((MainActivity) mActivity).floatButton;
-        recyclerView.addOnScrollListener(new MyScrollListener(new MyScrollListener.HideListener() {
+        recyclerView.addOnScrollListener(new RecyclerViewScrollListener(new HideListener() {
             @Override
             public void hide() {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) floatingActionButton.getLayoutParams();

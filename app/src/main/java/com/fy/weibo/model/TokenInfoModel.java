@@ -30,6 +30,7 @@ public final class TokenInfoModel {
 
     public void get_token_info(LoadListener<TokenInfo> loadListener) {
 
+
         Map<String, String> params = new HashMap<>();
         params.put("access_token", Constants.ACCESS_TOKEN);
         Log.e("TAG", "---------------");

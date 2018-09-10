@@ -13,7 +13,6 @@ import java.util.TimeZone;
  */
 public class TimeUtil {
 
-
     public static String GMTtoNormal(String GMTTime) {
 
         SimpleDateFormat GMTFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);

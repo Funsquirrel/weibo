@@ -28,8 +28,8 @@ import okhttp3.ResponseBody;
 public final class CommentModel implements CommentContract.CommentContractModel {
 
 
-
     public void getComments(final String baseUrl, Map<String, String> params, final CommentContract.CommentContractPresenter presenter) {
+
 
 
         HttpUtil.getHttpUtil().getData(baseUrl, params, new Callback() {

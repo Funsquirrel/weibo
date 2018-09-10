@@ -1,87 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    xmlns:tools="http://schemas.android.com/tools">
-<android.support.v4.widget.NestedScrollView
-    android:layout_height="match_parent"
-    android:layout_above="@id/comment_btn"
-    android:layout_width="match_parent">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include
-            layout="@layout/wei_bo_item"
-            android:id="@+id/wei_bo_item"/>
+    android:orientation="vertical">
 
-        <View
-            android:id="@+id/dividing_line"
-            android:layout_width="match_parent"
-            android:background="@color/light_grey"
-            android:layout_height="15dp"
-            android:layout_below="@+id/wei_bo_item"/>
-        <RelativeLayout
-            android:id="@+id/comment_list"
-            android:layout_width="match_parent"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/content_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dividing_line">
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:contentDescription="@string/image"
+            android:focusable="true"
+            android:src="@drawable/ic_left_black" />
 
-            <LinearLayout
-                android:id="@+id/comment_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-                <TextView
-                    android:id="@+id/comment_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"
-                    android:textStyle="bold"
-                    android:text="@string/comment"
-                    tools:ignore="SpUsage" />
-                <TextView
-                    android:id="@+id/comment_count_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"
-                    android:textStyle="bold"
-                    android:layout_marginStart="10dp"
-                    tools:text="100"
-                    tools:ignore="SpUsage" />
+        <TextView
+            android:id="@+id/content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/weibo_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </android.support.v7.widget.Toolbar>
 
-            </LinearLayout>
-            <View
-                android:id="@+id/dividing_line2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_margin="3dp"
-                android:background="@color/light_grey"
-                android:layout_below="@id/comment_title"
-                />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/comment_content_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                android:layout_margin="8dp"
-                android:layout_below="@id/dividing_line2">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
-    <Button
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/content_refresh"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/comment_btn"
-        android:text="发送评论"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/holo_orange_light"/>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/content_tool_bar">
 
-<!-- 微博正文 -->
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/content_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@drawable/scroll_bar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/wei_bo_item"
+                    layout="@layout/wei_bo_item" />
+
+                <View
+                    android:id="@+id/dividing_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:layout_below="@+id/wei_bo_item"
+                    android:background="@color/light_grey" />
+
+                <RelativeLayout
+                    android:id="@+id/comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dividing_line">
+
+                    <LinearLayout
+                        android:id="@+id/comment_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:id="@+id/comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/comment"
+                            android:textSize="@dimen/text_size"
+                            android:textStyle="bold"
+                            tools:ignore="SpUsage" />
+
+                        <TextView
+                            android:id="@+id/comment_count_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textSize="@dimen/text_size"
+                            android:textStyle="bold"
+                            tools:ignore="SpUsage"
+                            tools:text="100" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/dividing_line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_below="@id/comment_title"
+                        android:layout_margin="3dp"
+                        android:background="@color/light_grey" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/comment_content_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dividing_line2"
+                        android:layout_margin="8dp"
+                        android:focusableInTouchMode="true">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/comment_content_list" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/comment_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/send_comment_button"
+        android:text="@string/send_comment" />
+
+</RelativeLayout>
+    <!-- 微博正文 -->

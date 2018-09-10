@@ -14,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
@@ -60,7 +61,7 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
     public FloatingActionButton floatButton;
     public Toolbar toolbar;
     private WbShareHandler shareHandler;
-
+    private TextView textView;
 
     @Override
     public int getLayoutId() {
@@ -74,6 +75,7 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
         if (!NetStateUtil.checkNet(this))
             Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
         toolbar = findViewById(R.id.tool_bar);
+        textView = findViewById(R.id.tool_bar_title);
         drawerLayout = findViewById(R.id.drawer_layout);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
@@ -84,8 +86,14 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
         userImg = findViewById(R.id.nav_head_img);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            actionBar.setTitle("");
         }
+        textView.setText("微 博");
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.syncState();
+
         navigationView.setCheckedItem(R.id.first_page);
         transaction.replace(R.id.main_frame, new WeiBoViewPagerFragment());
         transaction.commit();
@@ -96,18 +104,21 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.main_frame, new WeiBoViewPagerFragment());
                     transaction.commit();
+                    textView.setText("微 博");
                     drawerLayout.closeDrawers();
                     break;
                 case R.id.my_comment:
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.main_frame, new CommentViewPagerFragment());
                     transaction.commit();
+                    textView.setText("我 的 评 论");
                     drawerLayout.closeDrawers();
                     break;
                 case R.id.message:
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.main_frame, new MentionViewPagerFragment());
                     transaction.commit();
+                    textView.setText("提 到 我");
                     drawerLayout.closeDrawers();
                 default:
                     break;
@@ -116,7 +127,7 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
         });
 
         floatButton.setOnClickListener(view -> {
-            if (new NetStateUtil().checkNet(this)){
+            if (NetStateUtil.checkNet(this)){
                 initWeibo();
                 sendMultiMessage();
             } else {
@@ -146,27 +157,12 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                break;
-            default:
-                break;
-        }
-
-        return true;
-    }
-
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mPresenter != null) {
             mPresenter.detach();
             this.finish();
         }
-//        Log.e("TAG", "onDestroy" + "  " + Constants.ACCESS_TOKEN);
     }
 
     @Override
@@ -174,7 +170,6 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
         Map<String, String> params = new HashMap<>();
         params.put("access_token", Constants.ACCESS_TOKEN);
         params.put("uid", Constants.UID);
-//        Log.e("TAG", Constants.UID + "这是uid loadUserInfo");
         mPresenter.loadUserInfo(Constants.GET_USERS_SHOW, params);
     }
 

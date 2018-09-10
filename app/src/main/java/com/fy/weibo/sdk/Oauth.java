@@ -1,11 +1,7 @@
 package com.fy.weibo.sdk;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +32,7 @@ public final class Oauth {
     private DataBase dataBase;
     private SsoHandler mSsoHandler;
     private Oauth2AccessToken accessToken;
+
     public Oauth(Activity activity) {
         this.activity = activity;
         mSsoHandler = new SsoHandler(activity);
@@ -82,7 +79,7 @@ public final class Oauth {
         });
     }
 
-    public void oauthWeiBo(){
+    public void oauthWeiBo() {
 
         mSsoHandler.authorize(new WbAuthListener() {
             @Override
@@ -125,12 +122,12 @@ public final class Oauth {
             public void onSuccess(TokenInfo tokenInfo) {
 
                 Log.e("TAG", "你应该是子线程" + Thread.currentThread().getName());
-                if (tokenInfo == null || (tokenInfo.getExpire_in().equals("")||Integer.valueOf(tokenInfo.getExpire_in()) <= 0)) {
+                if (tokenInfo == null || (tokenInfo.getExpire_in().equals("") || Integer.valueOf(tokenInfo.getExpire_in()) <= 0)) {
                     activity.runOnUiThread(() -> {
                         Toast.makeText(activity, "微博授权过期请重新授权", Toast.LENGTH_SHORT).show();
                     });
                 } else {
-                    activity.runOnUiThread(() ->{
+                    activity.runOnUiThread(() -> {
                         String userInfo = "{\"uid\":" + tokenInfo.getUid() + ",\"access_token\":" + Constants.ACCESS_TOKEN + "}";
                         UserState.saveCurrentUserInfo(activity, userInfo);
                         Constants.UID = AccessTokenKeeper.readAccessToken(activity).getUid();
@@ -145,12 +142,12 @@ public final class Oauth {
 
             @Override
             public void onFailure(String e) {
-                Log.e("TAG", e);
-                Looper.prepare();
-                Toast.makeText(activity, "授权失败请检查后重试", Toast.LENGTH_SHORT).show();
-                activity.startActivity(new Intent(activity, LoginActivity.class));
-                activity.finish();
-                Looper.loop();
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "授权失败请检查后重试", Toast.LENGTH_SHORT).show();
+                    activity.startActivity(new Intent(activity, LoginActivity.class));
+                    activity.finish();
+
+                });
             }
         });
 
