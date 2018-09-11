@@ -82,8 +82,8 @@ public final class LoginFragment extends BaseFragment {
                 } else {
                     Constants.USER_ACCOUNT = accountEdit.getText().toString();
                     Constants.USER_PASSWORD = passEdit.getText().toString();
-                    Constants.ACCESS_TOKEN = getToken();
-                    Log.e("TAG", "LoginFragment-----" + Constants.ACCESS_TOKEN);
+                    Constants.ACCESS_TOKEN = getTokenUid()[0];
+                    Constants.UID = getTokenUid()[1];
                     oauth.isOauth();
                 }
             } else Toast.makeText(mActivity, "请检查网络", Toast.LENGTH_SHORT).show();
@@ -104,10 +104,10 @@ public final class LoginFragment extends BaseFragment {
         return DataBaseHelper.getDataBaseHelper().checkPassword(account, password);
     }
 
-    private String getToken() {
+    private String[] getTokenUid() {
         String account = accountEdit.getText().toString();
         String password = passEdit.getText().toString();
-        return DataBaseHelper.getDataBaseHelper().getUserToken(account, password);
+        return DataBaseHelper.getDataBaseHelper().getUserTokenUid(account, password);
     }
 
 }
