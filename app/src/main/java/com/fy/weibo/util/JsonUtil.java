@@ -1,6 +1,7 @@
 package com.fy.weibo.util;
 
 import com.fy.weibo.bean.Comments;
+import com.fy.weibo.bean.SimpleUser;
 import com.fy.weibo.bean.TokenInfo;
 import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.bean.WeiBo;
@@ -79,6 +80,13 @@ public class JsonUtil {
         Gson gson = new Gson();
         return gson.fromJson(json, UserInfo.class);
     }
+
+    public static SimpleUser getSimpleUserInfo(String json) {
+
+        Gson gson = new Gson();
+        return gson.fromJson(json, SimpleUser.class);
+    }
+
 }
 
 /*

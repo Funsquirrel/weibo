@@ -5,6 +5,7 @@ import android.util.Log;
 import com.fy.weibo.App;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,6 +17,7 @@ import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
@@ -57,7 +59,7 @@ public class HttpUtil {
     }
 
 
-    public void getData(String address, Map<String, String> params, Callback callback) {
+    public void AsyncGET(String address, Map<String, String> params, Callback callback) {
 
         HttpUrl httpUrl = HttpUrl.parse(address);
         if (httpUrl != null) {
@@ -99,9 +101,9 @@ public class HttpUtil {
 
     }
 
-    //  post 请求
+    //  AsyncPost 请求
 
-    public void post(String baseUrl, Map<String, String> params, Callback callback) {
+    public void AsyncPost(String baseUrl, Map<String, String> params, Callback callback) {
 
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         for (Entry<String, String> entry : params.entrySet()) {
@@ -121,6 +123,29 @@ public class HttpUtil {
         if (call != null) {
             call.enqueue(callback);
         }
+    }
+
+
+    public ResponseBody SyncGET(String baseUrl, Map<String, String> params) {
+
+        HttpUrl httpUrl = HttpUrl.parse(baseUrl);
+        ResponseBody responseBody = null;
+        if (httpUrl != null) {
+            HttpUrl.Builder urlBuilder = httpUrl.newBuilder();
+            for (Entry<String, String> entry: params.entrySet()) {
+                urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
+            }
+            httpUrl = urlBuilder.build();
+            Request request = new Request.Builder().url(httpUrl.toString()).build();
+            Log.e("TAG", "这是URL" + httpUrl.toString());
+            OkHttpClient client = new OkHttpClient.Builder().build();
+            try {
+                responseBody = client.newCall(request).execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return responseBody;
     }
 
 }

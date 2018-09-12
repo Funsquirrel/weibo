@@ -31,6 +31,7 @@ import com.fy.weibo.R;
 import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.contract.UserInfoContract;
 
+import com.fy.weibo.fragment.AccountInfoFragment;
 import com.fy.weibo.fragment.MentionViewPagerFragment;
 import com.fy.weibo.fragment.CommentViewPagerFragment;
 import com.fy.weibo.fragment.WeiBoViewPagerFragment;
@@ -119,6 +120,12 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
                     transaction.replace(R.id.main_frame, new MentionViewPagerFragment());
                     transaction.commit();
                     textView.setText("提 到 我");
+                    drawerLayout.closeDrawers();
+                    break;
+                case R.id.account:
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.main_frame, new AccountInfoFragment());
+                    transaction.commit();
                     drawerLayout.closeDrawers();
                 default:
                     break;

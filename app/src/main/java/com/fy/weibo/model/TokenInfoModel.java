@@ -33,9 +33,8 @@ public final class TokenInfoModel {
 
         Map<String, String> params = new HashMap<>();
         params.put("access_token", Constants.ACCESS_TOKEN);
-        Log.e("TAG", "---------------");
-        Log.e("TAG", "我是token" + Constants.ACCESS_TOKEN + "你长啥样");
-        HttpUtil.getHttpUtil().post(Constants.GET_TOKEN_INFO, params, new Callback() {
+        Log.e("TAG", "get_token_info------token" + Constants.ACCESS_TOKEN);
+        HttpUtil.getHttpUtil().AsyncPost(Constants.GET_TOKEN_INFO, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 if (!NetStateUtil.checkNet(App.getAppInstance().getApplicationContext()))

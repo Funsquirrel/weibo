@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
@@ -88,7 +89,7 @@ public final class CommentsFragment extends BaseMVPFragment<CommentContract.Comm
             if (!NetStateUtil.checkNet(mActivity))
             Toast.makeText(mActivity, "请检查网络", Toast.LENGTH_SHORT).show();
         });
-
+        ((MainActivity)mActivity).floatButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -109,7 +110,6 @@ public final class CommentsFragment extends BaseMVPFragment<CommentContract.Comm
                 commentsList.addAll(comments);
                 commentsAdapter.notifyDataSetChanged();
             }
-
             commentsList = comments;
             commentsAdapter = new CommentsAdapter(getAttachActivity(), commentsList);
             recyclerView.setAdapter(commentsAdapter);
@@ -133,7 +133,7 @@ public final class CommentsFragment extends BaseMVPFragment<CommentContract.Comm
         if (isAttachContext()) {
             mActivity.runOnUiThread(() -> {
                 refreshLayout.setRefreshing(false);
-//                Toast.makeText(mActivity, e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, e, Toast.LENGTH_SHORT).show();
             });
         }
     }

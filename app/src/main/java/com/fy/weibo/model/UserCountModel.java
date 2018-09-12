@@ -1,14 +1,10 @@
 package com.fy.weibo.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.fy.weibo.App;
 import com.fy.weibo.bean.UserCounts;
 import com.fy.weibo.contract.UserCountContract;
-import com.fy.weibo.interfaces.IModel;
-import com.fy.weibo.presenter.UserCountPresenter;
-import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.HttpUtil;
 import com.fy.weibo.util.NetStateUtil;
 import com.google.gson.Gson;
@@ -33,7 +29,7 @@ public final class UserCountModel implements UserCountContract.UserCountModel{
     @Override
     public void getUserCount(String baseUrl, Map<String, String> params, UserCountContract.UserCountContractPresenter presenter) {
 
-        HttpUtil.getHttpUtil().getData( baseUrl, params, new Callback() {
+        HttpUtil.getHttpUtil().AsyncGET( baseUrl, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 if (!NetStateUtil.checkNet(App.getAppInstance().getApplicationContext()))

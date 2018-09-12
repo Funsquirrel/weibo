@@ -1,13 +1,10 @@
 package com.fy.weibo.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.fy.weibo.App;
 import com.fy.weibo.bean.Comments;
 import com.fy.weibo.contract.CommentContract;
-import com.fy.weibo.interfaces.IModel;
-import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.util.HttpUtil;
 import com.fy.weibo.util.JsonUtil;
 import com.fy.weibo.util.NetStateUtil;
@@ -32,7 +29,7 @@ public final class CommentModel implements CommentContract.CommentContractModel 
 
 
 
-        HttpUtil.getHttpUtil().getData(baseUrl, params, new Callback() {
+        HttpUtil.getHttpUtil().AsyncGET(baseUrl, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 if (!NetStateUtil.checkNet(App.getAppInstance().getApplicationContext()))

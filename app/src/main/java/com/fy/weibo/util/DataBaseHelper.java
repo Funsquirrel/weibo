@@ -9,6 +9,9 @@ import android.widget.Toast;
 import com.fy.weibo.App;
 import com.fy.weibo.sdk.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Fan on 2018/8/30.
  * Fighting!!!
@@ -45,9 +48,11 @@ public final   class DataBaseHelper {
                 String s = cursor.getString(cursor.getColumnIndex("account"));
                 String a = cursor.getString(cursor.getColumnIndex("password"));
                 String d = cursor.getString(cursor.getColumnIndex("token"));
+                String u = cursor.getString(cursor.getColumnIndex("uid"));
                 Log.e("TAG", s);
                 Log.e("TAG", a);
                 Log.e("TAG", d);
+                Log.e("TAG", u);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -86,24 +91,38 @@ public final   class DataBaseHelper {
         }
     }
 
-    public String getUserToken(String account, String password) {
+    public String[] getUserTokenUid(String account, String password) {
 
-        Cursor cursor = instance.getWritableDatabase().rawQuery("SELECT token FROM User WHERE account= \"" + account + "\" AND password= \"" + password + "\"", null);
-        cursor.moveToFirst();
-        String token = cursor.getString(0);
-        Log.e("TAG", token);
+        Cursor cursor = sqLiteDatabase.query("User", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String dbAccount = cursor.getString(cursor.getColumnIndex("account"));
+                String dbPass = cursor.getString(cursor.getColumnIndex("password"));
+                if (account.equals(dbAccount) && password.equals(dbPass)){
+                    Log.e("TAG", "相同账户");
+                    String token = cursor.getString(cursor.getColumnIndex("token"));
+                    String uid = cursor.getString(cursor.getColumnIndex("uid"));
+                    Log.e("TAG", "这是token和uid" + token + "-----" + uid);
+                    return new String[]{token, uid};
+                }
+            } while (cursor.moveToNext());
+        }
         cursor.close();
-        return token;
-
+        return null;
     }
 
-    public void saveUserToken(String account, String password, String token) {
+
+
+
+
+    public void saveUserToken(String account, String password, String token, String uid) {
 
         sqLiteDatabase = instance.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("account", account);
         contentValues.put("password", password);
         contentValues.put("token", token);
+        contentValues.put("uid", uid);
         sqLiteDatabase.insert("User", null, contentValues);
         contentValues.clear();
 
@@ -123,6 +142,21 @@ public final   class DataBaseHelper {
         }
         cursor.close();
         return true;
+    }
+
+    public List<String[]> getTokenInfoList() {
+
+        List<String[]> tokenInfoList = new ArrayList<>();
+        Cursor cursor = sqLiteDatabase.query("User", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String token = cursor.getString(cursor.getColumnIndex("token"));
+                String uid = cursor.getString(cursor.getColumnIndex("uid"));
+                tokenInfoList.add(new String[]{token, uid});
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return tokenInfoList;
     }
 
 }

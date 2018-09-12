@@ -14,7 +14,7 @@ import com.fy.weibo.sdk.Constants;
 public final class DataBase extends SQLiteOpenHelper {
 
 
-    private static final String CREATE_USER = "CREATE TABLE User (account text, password text, token text)";
+    private static final String CREATE_USER = "CREATE TABLE User (account text, password text, token text, uid text)";
     private Context context;
     public DataBase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

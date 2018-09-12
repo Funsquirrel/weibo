@@ -39,22 +39,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void UserInfoTest() {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("access_token", "2.00YhYe2GcjI2oB4edd81f93bzqRdkD");
-        params.put("screen_name", "光合F");
-        HttpUtil.getData(Constants.GET_COMMENT_MENTION, params, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String json = response.body().string();
-                Log.e("TAG", json);
-            }
-        });
     }
 
 

@@ -3,7 +3,6 @@ package com.fy.weibo.model;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.fy.weibo.APPManager;
 import com.fy.weibo.App;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.contract.WeiBoContract;
@@ -12,7 +11,6 @@ import com.fy.weibo.util.JsonUtil;
 import com.fy.weibo.util.NetStateUtil;
 
 import java.io.IOException;
-import java.net.CacheResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +34,7 @@ public final class WeiBoModel implements WeiBoContract.WeiBoModel {
     @Override
     public void getWeiBoList(String baseUrl, Map<String, String> params, WeiBoContract.WeiBoContractPresenter presenter) {
 
-        HttpUtil.getHttpUtil().getData(baseUrl, params, new Callback() {
+        HttpUtil.getHttpUtil().AsyncGET(baseUrl, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 if (!NetStateUtil.checkNet(App.getAppInstance().getApplicationContext()))

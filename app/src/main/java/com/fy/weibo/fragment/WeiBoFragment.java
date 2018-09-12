@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
@@ -83,6 +84,7 @@ public final class WeiBoFragment extends BaseMVPFragment<WeiBoContract.WeiBoCont
                 Toast.makeText(mActivity, "请检查网络", Toast.LENGTH_SHORT).show();
             }
         });
+        ((MainActivity)mActivity).floatButton.setVisibility(View.VISIBLE);
     }
 
     @Override

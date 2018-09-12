@@ -15,6 +15,8 @@ public final class SimpleUser implements Serializable {
     private String screen_name;
     private String profile_image_url;
     private String cover_image_phone;
+    private String token;
+    private String uid;
 
 
     public String getCover_image_phone() {
@@ -41,4 +43,19 @@ public final class SimpleUser implements Serializable {
         this.profile_image_url = profile_image_url;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

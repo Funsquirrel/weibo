@@ -29,7 +29,6 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 public final class Oauth {
 
     private Activity activity;
-    private DataBase dataBase;
     private SsoHandler mSsoHandler;
     private Oauth2AccessToken accessToken;
 
@@ -41,7 +40,6 @@ public final class Oauth {
 
     public void oauthWeiBo(final String account, final String password) {
 
-        dataBase = new DataBase(App.getAppInstance().getApplicationContext(), "UserData.db", null, 1);
         mSsoHandler.authorize(new WbAuthListener() {
             @Override
             public void onSuccess(Oauth2AccessToken oauth2AccessToken) {
@@ -49,9 +47,8 @@ public final class Oauth {
                 accessToken = oauth2AccessToken;
                 String token = oauth2AccessToken.getToken();
                 Log.e(Constants.TAG, oauth2AccessToken.getToken());
-//                saveUserData(account, password, token);
-
-                DataBaseHelper.getDataBaseHelper().saveUserToken(account, password, token);
+                String uid = oauth2AccessToken.getUid();
+                DataBaseHelper.getDataBaseHelper().saveUserToken(account, password, token, uid);
                 Constants.ACCESS_TOKEN = oauth2AccessToken.getToken();
                 Constants.UID = oauth2AccessToken.getUid();
                 AccessTokenKeeper.writeAccessToken(activity, oauth2AccessToken);
@@ -121,7 +118,6 @@ public final class Oauth {
             @Override
             public void onSuccess(TokenInfo tokenInfo) {
 
-                Log.e("TAG", "你应该是子线程" + Thread.currentThread().getName());
                 if (tokenInfo == null || (tokenInfo.getExpire_in().equals("") || Integer.valueOf(tokenInfo.getExpire_in()) <= 0)) {
                     activity.runOnUiThread(() -> {
                         Toast.makeText(activity, "微博授权过期请重新授权", Toast.LENGTH_SHORT).show();

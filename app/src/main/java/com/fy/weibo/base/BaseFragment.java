@@ -53,9 +53,6 @@ public abstract class BaseFragment extends Fragment {
         mActivity = (Activity) context;
     }
 
-    public void showError(String e) {
-
-    }
 
     protected boolean isAttachContext() {
 
@@ -75,7 +72,7 @@ public abstract class BaseFragment extends Fragment {
 
     public static class ActivityNotAttachedException extends RuntimeException{
 
-        public ActivityNotAttachedException() {
+        ActivityNotAttachedException() {
             super("Fragment has disconnected from Activity !");
         }
     }

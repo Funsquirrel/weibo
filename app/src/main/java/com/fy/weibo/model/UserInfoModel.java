@@ -1,15 +1,10 @@
 package com.fy.weibo.model;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.fy.weibo.App;
-import com.fy.weibo.base.BasePresenter;
 import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.contract.UserInfoContract;
-import com.fy.weibo.interfaces.IModel;
-import com.fy.weibo.presenter.UserInfoPresenter;
 import com.fy.weibo.util.HttpUtil;
 import com.fy.weibo.util.JsonUtil;
 import com.fy.weibo.util.NetStateUtil;
@@ -32,7 +27,7 @@ public final class UserInfoModel implements UserInfoContract.UserInfoContractMod
 
     public void getUserInfo(String baseUrl, Map<String, String> params, UserInfoContract.UserInfoContractPresenter presenter) {
 
-        HttpUtil.getHttpUtil().getData( baseUrl, params, new Callback() {
+        HttpUtil.getHttpUtil().AsyncGET( baseUrl, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 if (!NetStateUtil.checkNet(App.getAppInstance().getApplicationContext()))
