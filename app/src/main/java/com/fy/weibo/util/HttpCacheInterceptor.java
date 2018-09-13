@@ -15,7 +15,7 @@ import okhttp3.Response;
  * Created by Fan on 2018/9/2.
  * Fighting!!!
  */
-public class HttpCacheInterceptor implements Interceptor {
+public final class HttpCacheInterceptor implements Interceptor {
 
 
     @Override

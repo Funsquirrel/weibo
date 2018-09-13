@@ -11,7 +11,7 @@ import java.util.TimeZone;
  * Created by Fan on 2018/8/3.
  * Fighting!!!
  */
-public class TimeUtil {
+public final class TimeUtil {
 
     public static String GMTtoNormal(String GMTTime) {
 

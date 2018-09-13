@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Fan on 2018/7/31.
  * Fighting!!!
  */
-public class JsonUtil {
+public final class JsonUtil {
 
 
     // 微博

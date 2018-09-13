@@ -6,7 +6,7 @@ import android.support.v4.widget.NestedScrollView;
  * Created by Fan on 2018/9/10.
  * Fighting!!!
  */
-public class ScrollViewListener implements NestedScrollView.OnScrollChangeListener {
+public final class ScrollViewListener implements NestedScrollView.OnScrollChangeListener {
 
     private HideListener hideListener;
     private int hideHeight = 20;

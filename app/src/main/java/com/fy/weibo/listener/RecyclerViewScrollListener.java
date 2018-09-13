@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
  * Created by Fan on 2018/8/31.
  * Fighting!!!
  */
-public  class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
+public final class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
 
     private HideListener hideListener;

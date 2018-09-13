@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
  * Created by Fan on 2018/9/2.
  * Fighting!!!
  */
-public class NetStateUtil {
+public final class NetStateUtil {
 
 
     public static boolean checkNet(Context context) {

@@ -10,7 +10,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
  * Created by Fan on 2018/8/29.
  * Fighting!!!
  */
-public class UserState {
+public final class UserState {
 
     private static SharedPreferences sharedPreferences;
 

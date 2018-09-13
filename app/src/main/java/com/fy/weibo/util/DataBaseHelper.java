@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Fan on 2018/8/30.
  * Fighting!!!
  */
-public final   class DataBaseHelper {
+public final  class DataBaseHelper {
 
     private static volatile DataBaseHelper dataBaseHelper;
 

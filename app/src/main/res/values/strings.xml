@@ -42,4 +42,6 @@
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
     <string name="account_manager">账号管理</string>
+    <string name="save_image">保 存 图 片</string>
+
 </resources>

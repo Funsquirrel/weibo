@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Created by Fan on 2018/8/3.
  * Fighting!!!
  */
-public class ReUtil {
+public final class ReUtil {
 
     //   匹配微博来源
     public static String getSource(String source) {

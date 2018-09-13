@@ -29,7 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Fan on 2018/9/10.
  * Fighting!!!
  */
-public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.ViewHolder> {
+public final class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.ViewHolder> {
 
 
     private List<SimpleUser> userList;

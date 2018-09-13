@@ -24,7 +24,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by Fan on 2018/7/24.
  * Fighting!!!
  */
-public class HttpUtil {
+public final class HttpUtil {
 
     private HttpCacheInterceptor cacheInterceptor = new HttpCacheInterceptor();
     private int CACHE_SIZE = 10 * 1024 * 1024;
