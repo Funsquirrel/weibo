@@ -92,11 +92,7 @@ public final class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.
             saveImage(MD5Helper.string2MD5(largeUrl) + ".png", drawable);
         });
 
-
-        diaImageView.setOnClickListener((v) -> {
-            Toast.makeText(context, "取消", Toast.LENGTH_SHORT).show();
-            imageDia.cancel();
-        });
+        diaImageView.setOnClickListener((v) -> imageDia.cancel());
 
 
     }
@@ -154,7 +150,6 @@ public final class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.
     private void saveImage(String fileName, Drawable drawable) {
         String imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "weibo" + File.separator + "图片";
 //        String imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Pictures" + File.separator + "weibo";
-        Log.e("TAG", "imagePath-------" + imagePath);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File imageDir = new File(imagePath);
             if (!imageDir.exists())
