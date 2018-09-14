@@ -8,4 +8,6 @@ public interface LoadListener<T> {
 
     void onSuccess(T data);
     void onFailure(String e);
+
+
 }
