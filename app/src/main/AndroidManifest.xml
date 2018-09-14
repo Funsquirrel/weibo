@@ -10,12 +10,13 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/weibo_64"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/weibo_64"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity">
+
         </activity>
         <activity android:name=".activity.ContentActivity" />
         <activity android:name=".activity.StartActivity">
@@ -32,7 +33,6 @@
         <activity android:name=".activity.UserActivity">
 
         </activity>
-
 
     </application>
 

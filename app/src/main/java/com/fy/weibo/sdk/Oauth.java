@@ -30,7 +30,6 @@ public final class Oauth {
 
     private Activity activity;
     private SsoHandler mSsoHandler;
-    private Oauth2AccessToken accessToken;
 
     public Oauth(Activity activity) {
         this.activity = activity;
@@ -44,9 +43,8 @@ public final class Oauth {
             @Override
             public void onSuccess(Oauth2AccessToken oauth2AccessToken) {
 
-                accessToken = oauth2AccessToken;
                 String token = oauth2AccessToken.getToken();
-                Log.e(Constants.TAG, oauth2AccessToken.getToken());
+//                Log.e(Constants.TAG, oauth2AccessToken.getToken());
                 String uid = oauth2AccessToken.getUid();
                 DataBaseHelper.getDataBaseHelper().saveUserToken(account, password, token, uid);
                 Constants.ACCESS_TOKEN = oauth2AccessToken.getToken();
@@ -82,12 +80,12 @@ public final class Oauth {
             @Override
             public void onSuccess(Oauth2AccessToken oauth2AccessToken) {
 
-                Log.e("TAG", oauth2AccessToken.getToken() + "授权成功");
+//                Log.e("TAG", oauth2AccessToken.getToken() + "授权成功");
                 AccessTokenKeeper.writeAccessToken(activity, oauth2AccessToken);
                 Constants.UID = oauth2AccessToken.getUid();
 
                 if (!Constants.USER_ACCOUNT.equals("") && !Constants.USER_PASSWORD.equals("")) {
-                    Log.e("TAG", "我在更新token");
+//                    Log.e("TAG", "我在更新token");
                     DataBaseHelper.getDataBaseHelper().updateToken(Constants.USER_ACCOUNT, Constants.USER_PASSWORD, oauth2AccessToken.getToken());
                     DataBaseHelper.getDataBaseHelper().checkAccount();
                 }
@@ -121,6 +119,8 @@ public final class Oauth {
                 if (tokenInfo == null || (tokenInfo.getExpire_in().equals("") || Integer.valueOf(tokenInfo.getExpire_in()) <= 0)) {
                     activity.runOnUiThread(() -> {
                         Toast.makeText(activity, "微博授权过期请重新授权", Toast.LENGTH_SHORT).show();
+                        activity.startActivity(new Intent(activity, LoginActivity.class));
+                        activity.finish();
                     });
                 } else {
                     activity.runOnUiThread(() -> {

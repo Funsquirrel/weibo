@@ -1,6 +1,5 @@
 package com.fy.weibo.adapter;
 
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,10 +34,8 @@ import com.fy.weibo.util.NetStateUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
-
-
 /**
- * Created by Fan on 2018/8/18.
+ * Created by Fan on 2018/9/10.
  * Fighting!!!
  */
 public final class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.ViewHolder> {

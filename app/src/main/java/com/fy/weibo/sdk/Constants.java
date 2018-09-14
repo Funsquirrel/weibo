@@ -8,17 +8,13 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
  */
 public final class Constants {
 
-    // 2.00YhYe2GcjI2oB572035d98fYbknMC   action=login&response_type=code&redirect_uri=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fdefault.html&client_id=1659988100&appkey62=2FFUmo&userId=15540922270&passwd=zhangfan123
     public static final String APP_KEY = "1659988100";
     public static  String UID = "";
     public static String USER_ACCOUNT = "";
     public static String USER_PASSWORD = "";
     public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
-    public static Oauth2AccessToken accessToken = null;
     public static  String ACCESS_TOKEN = "";//token改动 ybc
     public static final String SCOPE = null;
-    public static final String App_SECRET = "c624038a6b168c44d8fea099c11199e0";
-    public static final String KEY_SHARE_TYPE = "key_share_type";
     public static final String TAG = "TAG";
     // post 请求
 //    public static final String ACCESS_TOKEN = "https://api.weibo.com/oauth2/access_token";

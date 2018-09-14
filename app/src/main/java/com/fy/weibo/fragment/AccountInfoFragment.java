@@ -45,7 +45,7 @@ public final class AccountInfoFragment extends BaseMVPFragment<AccountContract.A
 
     @Override
     public void initPresenter() {
-        mPresenter = new AccountListPresenter();
+        mPresenter = getPresenter();
         mPresenter.attachMV(this);
     }
 
@@ -62,6 +62,8 @@ public final class AccountInfoFragment extends BaseMVPFragment<AccountContract.A
         exitButton.setOnClickListener(view -> {
             AccessTokenKeeper.writeAccessToken(mActivity, new Oauth2AccessToken());
             startActivity(new Intent(mActivity, LoginActivity.class));
+            Constants.USER_ACCOUNT = "";
+            Constants.USER_PASSWORD = "";
             APPManager.getInstance().finishAllActivity();
         });
         accountRecyclerView = mRootView.findViewById(R.id.account_recycler_view);
@@ -100,6 +102,6 @@ public final class AccountInfoFragment extends BaseMVPFragment<AccountContract.A
 
     @Override
     public AccountContract.AccountContractPresenter getPresenter() {
-        return null;
+        return new AccountListPresenter();
     }
 }

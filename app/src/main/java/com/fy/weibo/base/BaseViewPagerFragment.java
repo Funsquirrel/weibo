@@ -55,7 +55,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
         tabStrip.setAccessible(true);
         LinearLayout llTab = null;
         try {
-            //得到承载下划线的LinearLayout   //源码可以看到SlidingTabStrip继承得到承载下划线的LinearLayout
+            //得到承载下划线的LinearLayout
             llTab = (LinearLayout) tabStrip.get(tabs);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
