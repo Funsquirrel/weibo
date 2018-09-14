@@ -1,4 +1,4 @@
-package com.fy.weibo.interfaces;
+package com.fy.weibo.listener;
 
 /**
  * Created by Fan on 2018/8/21.
