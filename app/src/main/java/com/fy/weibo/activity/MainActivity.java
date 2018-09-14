@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.fy.weibo.APPManager;
+import com.fy.weibo.base.BaseActivity;
 import com.fy.weibo.base.BaseMVPActivity;
 import com.fy.weibo.R;
 import com.fy.weibo.bean.UserInfo;
@@ -59,6 +60,7 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
     private FragmentTransaction transaction;
     public FloatingActionButton floatButton;
     public Toolbar toolbar;
+    private long firstTime = 0;
     private WbShareHandler shareHandler;
     private TextView textView;
 
@@ -258,6 +260,19 @@ public final class MainActivity extends BaseMVPActivity<UserInfoContract.
     public void onWbShareCancel() {
         Toast.makeText(this,"分享取消", Toast.LENGTH_LONG).show();
     }
+
+
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = secondTime;
+        } else{
+            finish();
+        }
+    }
+
 
 }
 
