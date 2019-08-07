@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.fy.weibo.App;
 import com.fy.weibo.bean.TokenInfo;
-import com.fy.weibo.interfaces.LoadListener;
+import com.fy.weibo.listener.LoadListener;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.HttpUtil;
 import com.fy.weibo.util.JsonUtil;

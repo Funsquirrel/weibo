@@ -21,10 +21,10 @@ public class ExampleUnitTest {
     @Test
     public void testUrl() {
 
-        String regEx = "\\[(.*)]";
+        String regEx = ".*((http|https).*)";
         Pattern pattern = Pattern.compile(regEx);
-        Matcher matcher = pattern.matcher("[12444dfd]");
-//        Matcher matcher = pattern.matcher("[{\"id\":5164746914,\"followers_count\":41,\"friends_count\":16,\"statuses_count\":0,\"private_friends_count\":0,\"pagefriends_count\":0}]");
+//        Matcher matcher = pattern.matcher("[12444dfd]");
+        Matcher matcher = pattern.matcher(">大富大贵的共产党http://baidu.com");
         System.out.println(matcher.find() ? matcher.group(1) : "没有匹配");
     }
 }

@@ -41,6 +41,9 @@ public final class RecyclerViewScrollListener extends RecyclerView.OnScrollListe
         /*
         当控件可见并且手指向上滑动或者控件不可见并且手指向下滑动时
         distance 累加
+
+        dy > 0表示手指向上滑，可以将显示的内容看成一个画布，当手指下滑时就如同拖动画布向下滚动
+        纵坐标增大
          */
         if (visible && dy > 0 || (!visible && dy < 0)) {
             distance += dy;
@@ -48,3 +51,5 @@ public final class RecyclerViewScrollListener extends RecyclerView.OnScrollListe
 
     }
 }
+
+

@@ -23,6 +23,7 @@ public final class WeiBo implements Serializable {
     private String source;
     private SimpleUser user;
     private List<PicUrlsBean> pic_urls;
+    private String textUrl = "";
 
 
     public List<PicUrlsBean> getPic_urls() {
@@ -116,4 +117,7 @@ public final class WeiBo implements Serializable {
     }
 
 
+    public String getTextUrl() {
+        return ReUtil.getUrl(getText());
+    }
 }

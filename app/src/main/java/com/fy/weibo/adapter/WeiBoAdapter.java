@@ -11,6 +11,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,7 @@ import com.fy.weibo.R;
 import com.fy.weibo.activity.ContentActivity;
 import com.fy.weibo.bean.PicUrlsBean;
 import com.fy.weibo.bean.WeiBo;
+import com.fy.weibo.util.ReUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +72,21 @@ public final class WeiBoAdapter extends RecyclerView.Adapter<WeiBoAdapter.MyView
                 .load(lastedWeiBo.getUser().getProfile_image_url())
                 .apply(options)
                 .into(holder.userImage);
+/*
+
+        if (!ReUtil.getUrl(lastedWeiBo.getText()).equals("")){
+            int textLen = ReUtil.getText(lastedWeiBo.getText()).length();
+            SpannableString spannableString = new SpannableString(lastedWeiBo.getText());
+            URLSpan urlSpan = new URLSpan(ReUtil.getUrl(lastedWeiBo.getText()));
+            spannableString.setSpan(urlSpan, textLen, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            holder.weiBoText.setMovementMethod(LinkMovementMethod.getInstance());
+            holder.weiBoText.setHighlightColor(Color.parseColor("#36969696"));
+            holder.weiBoText.setText(spannableString);
+        } else holder.weiBoText.setText(lastedWeiBo.getText());
+*/
+
+
+
 
         holder.userName.setText(lastedWeiBo.getUser().getScreen_name());
         holder.weiBoSource.setText(lastedWeiBo.getSource());

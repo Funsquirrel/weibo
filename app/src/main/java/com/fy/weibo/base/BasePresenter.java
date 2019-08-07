@@ -33,7 +33,6 @@ public abstract class BasePresenter<M extends IModel, V extends IBaseView> imple
     }
 
     public boolean isViewAttached() {
-
         return iView != null;
     }
 

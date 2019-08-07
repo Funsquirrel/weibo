@@ -144,6 +144,7 @@ public final class WeiBoFragment extends BaseMVPFragment<WeiBoContract.WeiBoCont
         itemRecyclerView.addOnScrollListener(new RecyclerViewScrollListener(new HideListener() {
             @Override
             public void hide() {
+            	//  获取参数
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) floatingActionButton.getLayoutParams();
                 // 属性动画
                 floatingActionButton.animate().translationY(floatingActionButton.getHeight() + params.bottomMargin).setInterpolator(new AccelerateDecelerateInterpolator());

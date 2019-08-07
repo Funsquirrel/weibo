@@ -6,14 +6,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fy.weibo.APPManager;
-import com.fy.weibo.App;
 import com.fy.weibo.R;
 import com.fy.weibo.activity.LoginActivity;
 import com.fy.weibo.activity.MainActivity;
 import com.fy.weibo.bean.TokenInfo;
-import com.fy.weibo.interfaces.LoadListener;
+import com.fy.weibo.listener.LoadListener;
 import com.fy.weibo.model.TokenInfoModel;
-import com.fy.weibo.util.DataBase;
 import com.fy.weibo.util.DataBaseHelper;
 import com.fy.weibo.util.UserState;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;

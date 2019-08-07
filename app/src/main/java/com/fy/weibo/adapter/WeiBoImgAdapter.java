@@ -162,9 +162,7 @@ public final class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.
                 e.printStackTrace();
             }
 
-
         }
     }
-
 
 }

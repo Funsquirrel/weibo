@@ -18,11 +18,15 @@ public abstract class BaseMVPActivity<P extends BasePresenter> extends BaseActiv
 
     public P mPresenter;
 
-    public abstract int getLayoutId();
+
 
     public abstract void initView();
 
-    public abstract void initPresenter();
+    public  void initPresenter(){
+
+        mPresenter = getPresenter();
+        mPresenter.attachMV(this);
+    };
 
 
     public void loadData() {

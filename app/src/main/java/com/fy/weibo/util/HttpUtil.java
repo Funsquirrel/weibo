@@ -6,6 +6,7 @@ import com.fy.weibo.App;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.Map.Entry;
 

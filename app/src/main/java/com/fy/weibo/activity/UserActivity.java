@@ -18,6 +18,7 @@ import com.fy.weibo.R;
 import com.fy.weibo.bean.UserCounts;
 import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.contract.UserCountContract;
+import com.fy.weibo.interfaces.IBaseView;
 import com.fy.weibo.presenter.UserCountPresenter;
 import com.fy.weibo.sdk.Constants;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public final class UserActivity extends BaseMVPActivity<UserCountContract.UserCountContractPresenter> implements UserCountContract.UserCountView {
+public final class UserActivity extends BaseMVPActivity implements IBaseView<UserCountPresenter> {
 
 
     private TextView friendCount;
@@ -49,6 +50,12 @@ public final class UserActivity extends BaseMVPActivity<UserCountContract.UserCo
         initData();
         friendCount = findViewById(R.id.friends_count);
         followerCount = findViewById(R.id.followers_count);
+    }
+
+    public void setUser(UserInfo user) {
+
+        //
+
     }
 
      void initData() {
@@ -92,12 +99,21 @@ public final class UserActivity extends BaseMVPActivity<UserCountContract.UserCo
                 });
     }
 
-
     @Override
-    public void initPresenter() {
-        mPresenter = getPresenter();
-        mPresenter.attachMV(this);
+    public UserCountPresenter getPresenter() {
+        return new UserCountPresenter();
     }
+
+
+//    @Override
+//    public void initPresenter() {
+//        mPresenter = getPresenter();
+//        mPresenter.attachMV(this);
+//    }
+
+/*
+
+
     @Override
     public void loadUserCount() {
 
@@ -121,4 +137,5 @@ public final class UserActivity extends BaseMVPActivity<UserCountContract.UserCo
     public UserCountContract.UserCountContractPresenter getPresenter() {
         return new UserCountPresenter();
     }
+*/
 }

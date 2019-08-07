@@ -20,13 +20,13 @@ public final class StartActivity extends BaseActivity {
     private boolean isSign = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        APPManager.getInstance().addActivity(this);
-        setContentView(R.layout.activity_splash);
-//        AccessTokenKeeper.writeAccessToken(this, new Oauth2AccessToken());
+    protected int getLayoutId() {
+        return R.layout.activity_splash;
+    }
 
-//   Java8 支持lambda表达式
+    @Override
+    protected void init() {
+
         new Handler().postDelayed(this::LoginApp, 2000);
 //        Log.e("TAG", "loginApp---uid" + AccessTokenKeeper.readAccessToken(this).getUid());
 //        Log.e("TAG", "loginApp--token" + AccessTokenKeeper.readAccessToken(this).getToken());
@@ -39,7 +39,10 @@ public final class StartActivity extends BaseActivity {
             Oauth oauth = new Oauth(this);
             oauth.isOauth();
         }
+
     }
+
+
 
     private void LoginApp() {
 
